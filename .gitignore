@@ -1,0 +1,30 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+*.vsidx
+*.ipch
+*.db
+/.vs/CSC8503/FileContentIndex/read.lock
+/.vs
+/Build
+/out/build/x64-Debug
+
+# Additional cleanup for CSC8503
+x64/
+out/
+CMakeFiles/
+*/CMakeFiles/
+
+# Build outputs
+*.exe
+*.obj
+*.pdb
+*.ilk
+*.lib
+
+# Logs / temp
+*.log
+
+# Videos (optional)
+*.mp4
