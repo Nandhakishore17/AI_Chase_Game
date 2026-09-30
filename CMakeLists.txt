@@ -98,4 +98,13 @@ if(USE_OPENGL)
     add_subdirectory(OpenGLRendering)
 endif() 
 
+################################################################################
+# Automated Tests
+################################################################################
+include(CTest)
+
+if(BUILD_TESTING)
+    add_subdirectory(Tests)
+endif()
+
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT CSC8503)
