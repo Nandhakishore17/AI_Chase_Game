@@ -1,30 +1,30 @@
-\# AI Chase â€” Requirements Traceability Matrix
+# AI Chase - Requirements Traceability Matrix
 
-\## Purpose
+## Purpose
 
-This Requirements Traceability Matrix (RTM) maps gameplay requirements to identified quality risks and planned test coverage.
+This Requirements Traceability Matrix (RTM) maps gameplay requirements to identified quality risks and test coverage.
 
 The matrix will evolve as manual tests, automated C++ tests, runtime validators and regression scenarios are implemented.
 
 Status values:
 
-\- BASELINE PASS â€” behaviour observed during baseline testing
+- BASELINE PASS - behaviour observed during baseline testing
 
-\- PARTIAL â€” some evidence exists but controlled validation is required
+- PARTIAL - some evidence exists but controlled validation is required
 
-\- NOT VERIFIED â€” insufficient evidence currently exists
+- NOT VERIFIED - insufficient evidence currently exists
 
-\- PLANNED â€” test has not yet been implemented/executed
+- PLANNED - test has not yet been implemented/executed
 
-\- AUTOMATED â€” automated coverage has been implemented
+- AUTOMATED - automated coverage has been implemented
 
-\- PASS â€” requirement has passed its defined test
+- PASS - requirement has passed its defined test
 
-\- FAIL â€” requirement has failed its defined test
+- FAIL - requirement has failed its defined test
 
-\---
+---
 
-\## Player
+## Player
 
 | Requirement ID | Requirement | Risk | Planned Test ID | Automation | Current Status |
 
@@ -36,9 +36,9 @@ Status values:
 
 | REQ-PLY-003 | Player shall remain controllable during normal gameplay | RISK-005 | TC-PLY-003 | Runtime candidate | BASELINE PASS |
 
-\---
+---
 
-\## Enemy AI
+## Enemy AI
 
 | Requirement ID | Requirement | Risk | Planned Test ID | Automation | Current Status |
 
@@ -60,29 +60,51 @@ Status values:
 
 | REQ-AI-008 | AI shall not enter an invalid state transition | RISK-003 | TC-AI-008 | State validator | NOT VERIFIED |
 
-\---
+---
 
-\## Navigation / Pathfinding
+## Navigation / Pathfinding
 
-| Requirement ID | Requirement | Risk | Planned Test ID | Automation | Current Status |
+| Requirement ID | Requirement | Risk | Test ID | Automation | Current Status |
 
 |---|---|---|---|---|---|
 
-| REQ-NAV-001 | Pathfinding shall return a valid path between reachable nodes | RISK-001 | TC-NAV-001 | GoogleTest | PLANNED |
+| REQ-NAV-001 | Pathfinding shall return a valid path between reachable nodes | RISK-001 | TC-NAV-001 | GoogleTest / CTest | PASS |
 
-| REQ-NAV-002 | Pathfinding shall handle unreachable destinations without invalid behaviour | RISK-001 | TC-NAV-002 | GoogleTest | PLANNED |
+| REQ-NAV-002 | Pathfinding shall handle unreachable destinations without invalid behaviour | RISK-001 | TC-NAV-002 | GoogleTest / CTest | PASS |
 
-| REQ-NAV-003 | Pathfinding shall handle start equal to goal safely | RISK-001 | TC-NAV-003 | GoogleTest | PLANNED |
+| REQ-NAV-003 | Pathfinding shall handle start equal to goal safely | RISK-001 | TC-NAV-003 | GoogleTest / CTest | PASS |
 
-| REQ-NAV-004 | Repeated path calculations shall remain consistent and independent | RISK-004 | TC-NAV-004 | GoogleTest | PLANNED |
+| REQ-NAV-004 | Repeated path calculations shall remain consistent and independent | RISK-004 | TC-NAV-004 | GoogleTest / CTest | PASS |
 
 | REQ-NAV-005 | Navigation shall account for blocking geometry | RISK-001 | TC-NAV-005 | Integration/runtime | PARTIAL |
 
 | REQ-NAV-006 | Pathfinding failure shall be detectable and diagnosable | RISK-001 | TC-NAV-006 | GoogleTest/runtime | PLANNED |
 
-\---
+### Additional Automated Navigation Coverage
 
-\## Fragile Item
+| Automated Test ID | Test | Related Requirement | Risk | Framework | Result |
+
+|---|---|---|---|---|---|
+
+| AT-NAV-001 | Direct connected-node path | REQ-NAV-001 | RISK-001 | GoogleTest / CTest | PASS |
+
+| AT-NAV-002 | Unreachable goal returns empty path | REQ-NAV-002 | RISK-001 | GoogleTest / CTest | PASS |
+
+| AT-NAV-003 | Start equal to goal returns a single-node path | REQ-NAV-003 | RISK-001 | GoogleTest / CTest | PASS |
+
+| AT-NAV-004 | Repeated execution produces an independent valid path | REQ-NAV-004 | RISK-004 | GoogleTest / CTest | PASS |
+
+| AT-NAV-005 | Lower-cost route selected when multiple paths exist | REQ-NAV-001 | RISK-001 | GoogleTest / CTest | PASS |
+
+| AT-NAV-006 | Repeated search recalculates the optimal route across shared nodes | REQ-NAV-004 | RISK-004 | GoogleTest / CTest | PASS |
+
+Navigation automated execution summary: \*\*6 executed, 6 passed, 0 failed.\*\*
+
+The repeated-search scenarios did not reproduce path corruption from persistent node search state. This result applies to the tested graph scenarios and does not eliminate RISK-004 from future regression consideration.
+
+---
+
+## Fragile Item
 
 | Requirement ID | Requirement | Risk | Planned Test ID | Automation | Current Status |
 
@@ -100,9 +122,9 @@ Status values:
 
 | REQ-ITEM-006 | Fragile-item break behaviour shall follow defined game rules | RISK-008 | TC-ITEM-006 | Unit/integration | NOT VERIFIED |
 
-\---
+---
 
-\## Delivery
+## Delivery
 
 | Requirement ID | Requirement | Risk | Planned Test ID | Automation | Current Status |
 
@@ -120,9 +142,9 @@ Status values:
 
 | REQ-DEL-006 | Successful delivery shall update score according to game rules | RISK-011 | TC-DEL-006 | Unit/integration | NOT VERIFIED |
 
-\---
+---
 
-\## Puzzle
+## Puzzle
 
 | Requirement ID | Requirement | Risk | Planned Test ID | Automation | Current Status |
 
@@ -134,9 +156,9 @@ Status values:
 
 | REQ-PUZ-003 | Repeated or abnormal interaction shall not create invalid puzzle state | RISK-012 | TC-PUZ-003 | Scenario candidate | NOT VERIFIED |
 
-\---
+---
 
-\## Grappling
+## Grappling
 
 | Requirement ID | Requirement | Risk | Planned Test ID | Automation | Current Status |
 
@@ -148,9 +170,9 @@ Status values:
 
 | REQ-GRP-003 | Grapple behaviour shall remain stable around unusual geometry | RISK-013 | TC-GRP-003 | Exploratory/runtime | NOT VERIFIED |
 
-\---
+---
 
-\## Multiple Enemy Behaviour
+## Multiple Enemy Behaviour
 
 | Requirement ID | Requirement | Risk | Planned Test ID | Automation | Current Status |
 
@@ -160,9 +182,9 @@ Status values:
 
 | REQ-MULTI-002 | Multiple enemies shall maintain valid individual AI behaviour | RISK-014 | TC-MULTI-002 | Runtime validator | NOT VERIFIED |
 
-\---
+---
 
-\## HUD / Diagnostics
+## HUD / Diagnostics
 
 | Requirement ID | Requirement | Risk | Planned Test ID | Automation | Current Status |
 
@@ -178,9 +200,9 @@ Status values:
 
 | REQ-HUD-005 | Displayed diagnostic values shall correspond to actual game state | RISK-016 | TC-HUD-005 | Integration/runtime | NOT VERIFIED |
 
-\---
+---
 
-\## Stability
+## Stability
 
 | Requirement ID | Requirement | Risk | Planned Test ID | Automation | Current Status |
 
@@ -192,42 +214,40 @@ Status values:
 
 | REQ-STAB-003 | Automated validation failures shall not terminate without diagnostic evidence | RISK-015 | TC-STAB-003 | Validation framework | PLANNED |
 
-\---
+---
 
-\## Traceability Model
+## Traceability Model
 
 The intended traceability chain is:
 
 Requirement
 
-â†’ Risk
+-> Risk
 
-â†’ Test Case
+-> Test Case
 
-â†’ Automated Test / Runtime Validator
+-> Automated Test / Runtime Validator
 
-â†’ Execution Result
+-> Execution Result
 
-â†’ Defect (if applicable)
+-> Defect (if applicable)
 
-â†’ Fix
+-> Fix
 
-â†’ Regression Result
+-> Regression Result
 
 Example:
 
 REQ-NAV-004
 
-â†’ RISK-004
+-> RISK-004
 
-â†’ TC-NAV-004
+-> TC-NAV-004
 
-â†’ Automated repeated-pathfinding test
+-> AT-NAV-004 / AT-NAV-006
 
-â†’ PASS or FAIL
+-> PASS
 
-â†’ DEFECT-NAV-001 if failure is confirmed
+-> No defect reproduced in tested scenarios
 
-â†’ Code fix
-
-â†’ Regression execution
+-> Continue regression coverage
