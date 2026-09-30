@@ -182,7 +182,6 @@ namespace NCL {
 			bool itemCarried = false;
 			bool itemBroken = false;
 
-			float breakImpulseThreshold = 30.0f;
 
 			GameObject* deliveryZone = nullptr;
 

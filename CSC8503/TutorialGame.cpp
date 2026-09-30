@@ -1,4 +1,5 @@
-﻿#include "Pathfinding.h"
+﻿#include "GameplayRules.h"
+#include "Pathfinding.h"
 #include "TutorialGame.h"
 #include "GameWorld.h"
 #include "PhysicsSystem.h"
@@ -56,7 +57,6 @@ TutorialGame::TutorialGame(GameWorld& gameWorld, GameTechRendererInterface& game
     itemBroken = false;
     grappling = false;
 
-    breakImpulseThreshold = 30.0f;
     score = 0;
     deliveredItems = 0;
     totalItems = 1;
@@ -717,8 +717,10 @@ void TutorialGame::UpdateFragileItem(float dt) {
 
     float dist = sqrt((i.x - p.x) * (i.x - p.x) + (i.y - p.y) * (i.y - p.y) + (i.z - p.z) * (i.z - p.z));
 
-    if (!itemCarried && dist < 12.0f && Window::GetKeyboard()->KeyPressed(KeyCodes::F))
-        itemCarried = true;
+    if (GameplayRules::CanPickupItem(dist, itemCarried, itemBroken) &&
+    Window::GetKeyboard()->KeyPressed(KeyCodes::F)) {
+    itemCarried = true;
+    }
 
     if (itemCarried && Window::GetKeyboard()->KeyPressed(KeyCodes::G)) {
         itemCarried = false;
@@ -749,17 +751,17 @@ void TutorialGame::UpdateDelivery(float dt) {
 
     float dist = sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y) + (a.z - b.z) * (a.z - b.z));
 
-    if (dist < 8.0f) {
+    if (GameplayRules::IsValidDelivery(dist, itemBroken)) {
 
         deliveredItems++;
-        score += 10;
+        score += GameplayRules::DeliveryScore;
         itemCarried = false;
 
         fragileItem->GetTransform().SetPosition(Vector3(0, -200, 0));
         fragileItem->GetPhysicsObject()->SetLinearVelocity(Vector3());
 
         
-        if (deliveredItems >= totalItems) {
+        if (GameplayRules::IsDeliveryComplete(deliveredItems, totalItems)) {
 
             gameWon = true;
             gameEnded = true;
@@ -785,7 +787,7 @@ void TutorialGame::CheckItemBreak(GameObject* item, const CollisionDetection::Co
         a->GetLinearVelocity() - b->GetLinearVelocity()
     );
 
-    if (impact > breakImpulseThreshold) {
+    if (GameplayRules::ShouldBreakItem(impact)) {
         itemBroken = true;
         itemCarried = false;
 

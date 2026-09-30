@@ -107,43 +107,53 @@ The repeated-search scenarios did not reproduce path corruption from persistent 
 ## Fragile Item
 
 | Requirement ID | Requirement | Risk | Planned Test ID | Automation | Current Status |
-
 |---|---|---|---|---|---|
+| REQ-ITEM-001 | Fragile item shall be available during the intended gameplay sequence | RISK-007 | TC-ITEM-001 | Integration/runtime | PASS |
+| REQ-ITEM-002 | Player shall be able to pick up the fragile item | RISK-007 | TC-ITEM-002 | Unit + integration/runtime | PASS |
+| REQ-ITEM-003 | Player shall be able to carry the fragile item | RISK-007 | TC-ITEM-003 | Integration/runtime | PASS |
+| REQ-ITEM-004 | Player shall be able to drop the fragile item | RISK-007 | TC-ITEM-004 | Integration/runtime | PASS |
+| REQ-ITEM-005 | Repeated pickup/drop interactions shall maintain valid item state | RISK-007 | TC-ITEM-005 | Scenario automation/runtime | PARTIAL |
+| REQ-ITEM-006 | Fragile-item break behaviour shall follow defined game rules | RISK-008 | TC-ITEM-006 | GoogleTest + runtime integration | PARTIAL |
 
-| REQ-ITEM-001 | Fragile item shall be available during the intended gameplay sequence | RISK-007 | TC-ITEM-001 | Integration candidate | BASELINE PASS |
+### Automated Fragile-Item Coverage
 
-| REQ-ITEM-002 | Player shall be able to pick up the fragile item | RISK-007 | TC-ITEM-002 | Integration candidate | PARTIAL |
+| Automated Test ID | Test | Related Requirement | Risk | Framework | Result |
+|---|---|---|---|---|---|
+| AT-ITEM-001 | Pickup allowed inside pickup distance | REQ-ITEM-002 | RISK-007 | GoogleTest / CTest | PASS |
+| AT-ITEM-002 | Pickup rejected at exact 12.0 boundary | REQ-ITEM-002 | RISK-007 | GoogleTest / CTest | PASS |
+| AT-ITEM-003 | Pickup rejected when item is already carried | REQ-ITEM-005 | RISK-007 | GoogleTest / CTest | PASS |
+| AT-ITEM-004 | Pickup rejected when item is broken | REQ-ITEM-006 | RISK-008 | GoogleTest / CTest | PASS |
+| AT-ITEM-005 | Item does not break below 30.0 impact threshold | REQ-ITEM-006 | RISK-008 | GoogleTest / CTest | PASS |
+| AT-ITEM-006 | Item does not break at exact 30.0 impact threshold | REQ-ITEM-006 | RISK-008 | GoogleTest / CTest | PASS |
+| AT-ITEM-007 | Item breaks above 30.0 impact threshold | REQ-ITEM-006 | RISK-008 | GoogleTest / CTest | PASS |
 
-| REQ-ITEM-003 | Player shall be able to carry the fragile item | RISK-007 | TC-ITEM-003 | Runtime candidate | BASELINE PASS |
-
-| REQ-ITEM-004 | Player shall be able to drop the fragile item | RISK-007 | TC-ITEM-004 | Integration candidate | NOT VERIFIED |
-
-| REQ-ITEM-005 | Repeated pickup/drop interactions shall maintain valid item state | RISK-007 | TC-ITEM-005 | Scenario automation | NOT VERIFIED |
-
-| REQ-ITEM-006 | Fragile-item break behaviour shall follow defined game rules | RISK-008 | TC-ITEM-006 | Unit/integration | NOT VERIFIED |
+Recorded runtime regression verified pickup, carry, drop and subsequent pickup behaviour. Repeated pickup/drop cycling remains only partially verified because the documented scenario requires several cycles. Fragile-item break decision boundaries are automated, but the physics-to-break runtime integration was not demonstrated in the recorded regression.
 
 ---
 
 ## Delivery
 
 | Requirement ID | Requirement | Risk | Planned Test ID | Automation | Current Status |
-
 |---|---|---|---|---|---|
+| REQ-DEL-001 | Delivery area shall be available during gameplay | RISK-009 | TC-DEL-001 | Integration/runtime | PASS |
+| REQ-DEL-002 | Valid delivery conditions shall complete delivery | RISK-009 | TC-DEL-002 | GoogleTest + integration/runtime | PASS |
+| REQ-DEL-003 | Invalid delivery conditions shall not complete delivery | RISK-010 | TC-DEL-003 | GoogleTest + integration/runtime | PARTIAL |
+| REQ-DEL-004 | Delivery boundary behaviour shall be consistent | RISK-010 | TC-DEL-004 | GoogleTest / CTest | PASS |
+| REQ-DEL-005 | Successful delivery shall update the relevant gameplay state | RISK-009 | TC-DEL-005 | Integration/runtime | PASS |
+| REQ-DEL-006 | Successful delivery shall update score according to game rules | RISK-011 | TC-DEL-006 | Integration/runtime | PASS |
 
-| REQ-DEL-001 | Delivery area shall be available during gameplay | RISK-009 | TC-DEL-001 | Runtime candidate | BASELINE PASS |
+### Automated Delivery Coverage
 
-| REQ-DEL-002 | Valid delivery conditions shall complete delivery | RISK-009 | TC-DEL-002 | Integration/runtime | NOT VERIFIED |
+| Automated Test ID | Test | Related Requirement | Risk | Framework | Result |
+|---|---|---|---|---|---|
+| AT-DEL-001 | Delivery allowed inside 8.0 delivery distance | REQ-DEL-002 | RISK-009 | GoogleTest / CTest | PASS |
+| AT-DEL-002 | Delivery rejected at exact 8.0 boundary | REQ-DEL-003, REQ-DEL-004 | RISK-010 | GoogleTest / CTest | PASS |
+| AT-DEL-003 | Delivery rejected when item is broken | REQ-DEL-003 | RISK-010 | GoogleTest / CTest | PASS |
+| AT-DEL-004 | Delivery incomplete below required item count | REQ-DEL-005 | RISK-009 | GoogleTest / CTest | PASS |
+| AT-DEL-005 | Delivery complete at required item count | REQ-DEL-005 | RISK-009 | GoogleTest / CTest | PASS |
+| AT-DEL-006 | Delivery remains complete above required item count | REQ-DEL-005 | RISK-009 | GoogleTest / CTest | PASS |
 
-| REQ-DEL-003 | Invalid delivery conditions shall not complete delivery | RISK-010 | TC-DEL-003 | Integration/runtime | NOT VERIFIED |
-
-| REQ-DEL-004 | Delivery boundary behaviour shall be consistent | RISK-010 | TC-DEL-004 | Boundary automation | NOT VERIFIED |
-
-| REQ-DEL-005 | Successful delivery shall update the relevant gameplay state | RISK-009 | TC-DEL-005 | Integration | NOT VERIFIED |
-
-| REQ-DEL-006 | Successful delivery shall update score according to game rules | RISK-011 | TC-DEL-006 | Unit/integration | NOT VERIFIED |
-
----
-
+Recorded runtime regression verified successful delivery, Delivered 1/1, score change from 0 to 10, the Delivery Complete end state, and no crash or freeze during the tested sequence. Invalid delivery has automated rule coverage but has not been comprehensively exercised as a runtime scenario.
 ## Puzzle
 
 | Requirement ID | Requirement | Risk | Planned Test ID | Automation | Current Status |

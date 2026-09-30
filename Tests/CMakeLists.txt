@@ -14,9 +14,11 @@ FetchContent_MakeAvailable(googletest)
 
 add_executable(${TEST_PROJECT_NAME}
     PathfindingTests.cpp
+    GameplayRulesTests.cpp
 
     ../CSC8503/Pathfinding.cpp
     ../CSC8503/NavigationNode.cpp
+    ../CSC8503/GameplayRules.cpp
 )
 
 target_include_directories(${TEST_PROJECT_NAME} PRIVATE

@@ -592,9 +592,12 @@ Type: Functional
 
 Delivery completes successfully and relevant gameplay state is updated.
 
-\### Status
+\### Actual Result
 
-NOT RUN
+Recorded runtime regression successfully delivered the fragile item to the delivery area. Delivery count changed to 1/1 and the game entered the expected Delivery Complete win state.
+### Status
+
+PASS
 
 \---
 
@@ -678,9 +681,12 @@ Type: Integration
 
 Score changes exactly according to the implemented delivery rule.
 
-\### Status
+\### Actual Result
 
-NOT RUN
+Recorded runtime regression showed the score changing from 0 to 10 following successful delivery, matching the implemented delivery scoring rule.
+### Status
+
+PASS
 
 \---
 
