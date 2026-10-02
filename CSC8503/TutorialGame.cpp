@@ -6,6 +6,7 @@
 #include "PhysicsObject.h"
 #include "RenderObject.h"
 #include "CollisionDetection.h"
+#include "SteeringRules.h"
 
 #include "Window.h"              
 #include "Keyboard.h"
@@ -886,7 +887,8 @@ void TutorialGame::UpdateEnemyAI(float dt) {
 
     pathUpdateTimer += dt;
 
-    for (EnemyData& enemy : enemies) {
+    for (size_t enemyIndex = 0; enemyIndex < enemies.size(); ++enemyIndex) {
+        EnemyData& enemy = enemies[enemyIndex];
 
         if (!enemy.enemyObject)
             continue;
@@ -911,6 +913,20 @@ void TutorialGame::UpdateEnemyAI(float dt) {
 
         Vector3 enemyPos =
             enemy.enemyObject->GetTransform().GetPosition();
+
+        bool previousMovementExpected =
+            enemy.movementExpected;
+
+        enemy.stuckDetected =
+            enemy.stuckDetector.Update(
+                enemyPos,
+                dt,
+                previousMovementExpected
+            );
+
+        // Movement intent will be set again below if
+        // the AI issues a movement command this frame.
+        enemy.movementExpected = false;
 
         Vector3 playerPos =
             playerObject->GetTransform().GetPosition();
@@ -1043,6 +1059,18 @@ void TutorialGame::UpdateEnemyAI(float dt) {
 
         
 
+        if (enemy.stuckDetected) {
+            Debug::Print(
+                "VALIDATION: ENEMY STUCK E" +
+                std::to_string(enemyIndex),
+                Vector2(
+                    5,
+                    80 + static_cast<float>(enemyIndex) * 3.0f
+                ),
+                Debug::RED
+            );
+        }
+
         if (pathUpdateTimer >= pathUpdateInterval) {
 
             NavigationNode* start =
@@ -1084,6 +1112,8 @@ void TutorialGame::UpdateEnemyAI(float dt) {
                 else if (enemy.state == EnemyState::Chase) {
                     speed = enemyChaseSpeed;
                 }
+
+                enemy.movementExpected = speed > 0.0f;
 
                 enemy.enemyObject
                     ->GetPhysicsObject()
@@ -1137,6 +1167,12 @@ void TutorialGame::UpdateEnemyAI(float dt) {
 
         Vector3 avoidance =
             CalculateAvoidanceForce(enemy);
+        avoidance =
+            SteeringRules::RemoveOpposingAvoidance(
+                avoidance,
+                dir
+            );
+
         Vector3 finalDir = (dir * 3.0f) + avoidance;
 
         finalDir = Vector::Normalise(finalDir);
@@ -1149,6 +1185,8 @@ void TutorialGame::UpdateEnemyAI(float dt) {
         }
 
         velocity.y = phys->GetLinearVelocity().y;
+
+        enemy.movementExpected = speed > 0.0f;
 
         phys->SetLinearVelocity(velocity);
 

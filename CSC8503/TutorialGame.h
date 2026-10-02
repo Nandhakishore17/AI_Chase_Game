@@ -2,6 +2,7 @@
 #include "RenderObject.h"
 #include "CollisionDetection.h"  
 #include "NavigationNode.h"
+#include "StuckAgentDetector.h"
 
 namespace NCL {
 	class Controller;
@@ -117,6 +118,10 @@ namespace NCL {
 				float patrolWaitTimer = 0.0f;
 				bool waitingAtNode = false;
 				float searchTimer = 0.0f;
+
+                                StuckAgentDetector stuckDetector;
+                                bool stuckDetected = false;
+                                bool movementExpected = false;
 
 				Vector3 forward = Vector3(0, 0, -1);
 
