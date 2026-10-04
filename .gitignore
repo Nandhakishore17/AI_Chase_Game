@@ -1,4 +1,4 @@
-﻿################################################################################
+################################################################################
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
@@ -28,3 +28,23 @@ CMakeFiles/
 
 # Videos (optional)
 *.mp4
+
+# Python virtual environment
+.venv/
+
+# Node.js dependencies
+node_modules/
+
+# Playwright generated output
+playwright-report/
+test-results/
+
+# Python generated cache
+__pycache__/
+*.pyc
+
+# Generated runtime validation results
+ValidationResults/
+
+# Playwright API test runtime artifacts
+Automation/tests/runtime/

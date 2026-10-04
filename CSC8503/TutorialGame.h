@@ -1,8 +1,9 @@
-﻿#pragma once
+#pragma once
 #include "RenderObject.h"
 #include "CollisionDetection.h"  
 #include "NavigationNode.h"
 #include "StuckAgentDetector.h"
+#include "ValidationResultCollector.h"
 
 namespace NCL {
 	class Controller;
@@ -80,6 +81,7 @@ namespace NCL {
 
 			
 			void StartGame(int enemyCount);
+                        void WriteValidationResults();
 			void DrawMenu();
 
 			std::vector<Vector3> enemyPatrolPoints;
@@ -225,6 +227,9 @@ namespace NCL {
 			void EnemyBonusDecision(EnemyData& enemy);
 
 			Vector3 CalculateAvoidanceForce(EnemyData& enemy);
+
+                 ValidationResultCollector validationResultCollector;
+                 float validationElapsedTime = 0.0f;
 
 			GameWorld& world;
 			GameTechRendererInterface& renderer;

@@ -17,12 +17,17 @@ add_executable(${TEST_PROJECT_NAME}
     GameplayRulesTests.cpp
     StuckAgentDetectorTests.cpp
     SteeringRulesTests.cpp
+    ValidationResultTests.cpp
+    ValidationResultCollectorTests.cpp
+    ValidationResultJsonWriterTests.cpp
 
     ../CSC8503/Pathfinding.cpp
     ../CSC8503/NavigationNode.cpp
     ../CSC8503/GameplayRules.cpp
     ../CSC8503/StuckAgentDetector.cpp
     ../CSC8503/SteeringRules.cpp
+    ../CSC8503/ValidationResultCollector.cpp
+    ../CSC8503/ValidationResultJsonWriter.cpp
 )
 
 target_include_directories(${TEST_PROJECT_NAME} PRIVATE

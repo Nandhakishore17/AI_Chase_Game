@@ -1,4 +1,4 @@
-﻿#include "GameplayRules.h"
+#include "GameplayRules.h"
 #include "Pathfinding.h"
 #include "TutorialGame.h"
 #include "GameWorld.h"
@@ -7,6 +7,7 @@
 #include "RenderObject.h"
 #include "CollisionDetection.h"
 #include "SteeringRules.h"
+#include "ValidationResultJsonWriter.h"
 
 #include "Window.h"              
 #include "Keyboard.h"
@@ -18,6 +19,7 @@
 #include "KeyboardMouseController.h"
 #include "GameTechRendererInterface.h"
 #include <cfloat>
+#include <filesystem>
 
 
 using namespace NCL;
@@ -171,6 +173,10 @@ physics.Clear();
     gameWon = false;
     gameLost = false;
     gameEnded = false;
+
+    validationResultCollector.Clear();
+    validationElapsedTime = 0.0f;
+    WriteValidationResults();
 
     InitCourierLevel();
     BuildNavigationGraph();
@@ -914,6 +920,8 @@ void TutorialGame::UpdateEnemyAI(float dt) {
         Vector3 enemyPos =
             enemy.enemyObject->GetTransform().GetPosition();
 
+        bool wasStuckDetected = enemy.stuckDetected;
+
         bool previousMovementExpected =
             enemy.movementExpected;
 
@@ -923,6 +931,20 @@ void TutorialGame::UpdateEnemyAI(float dt) {
                 dt,
                 previousMovementExpected
             );
+
+        if (!wasStuckDetected && enemy.stuckDetected) {
+            ValidationResult result;
+            result.validatorId = "AI_STUCK";
+            result.entityId =
+                "Enemy_" + std::to_string(enemyIndex + 1);
+            result.status = ValidationStatus::Fail;
+            result.message =
+                "Enemy failed to make meaningful movement progress";
+            result.timestampSeconds = validationElapsedTime;
+
+            validationResultCollector.AddResult(result);
+            WriteValidationResults();
+        }
 
         // Movement intent will be set again below if
         // the AI issues a movement command this frame.
@@ -1991,6 +2013,10 @@ void TutorialGame::UpdateGame(float dt) {
 
     if (!gameEnded) {
 
+        if (dt > 0.0f) {
+            validationElapsedTime += dt;
+        }
+
         UpdateEnemyAI(dt);
         UpdatePuzzleLogic(dt);
         UpdateGrapple(dt);
@@ -2180,6 +2206,39 @@ void TutorialGame::DrawNavigationGraph() {
         }
 
         return closest;
+    }
+
+    void TutorialGame::WriteValidationResults() {
+
+        std::error_code error;
+
+        std::filesystem::create_directories(
+            "ValidationResults",
+            error
+        );
+
+        if (error) {
+            Debug::Print(
+                "VALIDATION: RESULT DIRECTORY CREATION FAILED",
+                Vector2(5, 77),
+                Debug::RED
+            );
+            return;
+        }
+
+        bool writeSucceeded =
+            ValidationResultJsonWriter::WriteToFile(
+                validationResultCollector,
+                "ValidationResults/validation_results.json"
+            );
+
+        if (!writeSucceeded) {
+            Debug::Print(
+                "VALIDATION: RESULT WRITE FAILED",
+                Vector2(5, 77),
+                Debug::RED
+            );
+        }
     }
 
     bool TutorialGame::CanEnemySeePlayer(EnemyData& enemy) {

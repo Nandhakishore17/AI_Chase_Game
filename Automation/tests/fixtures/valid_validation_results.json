@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "summary": {
+    "total": 2,
+    "passed": 1,
+    "failed": 1,
+    "hasFailures": true
+  },
+  "results": [
+    {
+      "validatorId": "AI_STUCK",
+      "entityId": "Enemy_1",
+      "status": "PASS",
+      "message": "Enemy maintained meaningful movement progress",
+      "timestampSeconds": 12.5
+    },
+    {
+      "validatorId": "AI_STUCK",
+      "entityId": "Enemy_2",
+      "status": "FAIL",
+      "message": "Enemy failed to make meaningful movement progress",
+      "timestampSeconds": 18.42
+    }
+  ]
+}
