@@ -104,15 +104,56 @@ pipeline {
                 '''
             }
         }
+
+        stage('Prepare Playwright Environment') {
+            steps {
+                bat '''
+                    @echo off
+                    echo === Preparing Playwright API Test Environment ===
+
+                    node --version
+                    if errorlevel 1 exit /b 1
+
+                    npm.cmd --version
+                    if errorlevel 1 exit /b 1
+
+                    npm.cmd ci
+                    if errorlevel 1 exit /b 1
+
+                    npx.cmd playwright --version
+                    if errorlevel 1 exit /b 1
+                '''
+            }
+        }
+
+        stage('Run Playwright API Tests') {
+            steps {
+                bat '''
+                    @echo off
+                    echo === Running Playwright API Automation ===
+
+                    set "PATH=%CD%\\%PYTHON_VENV%\\Scripts;%PATH%"
+
+                    where python
+                    if errorlevel 1 exit /b 1
+
+                    python --version
+                    if errorlevel 1 exit /b 1
+
+                    npx.cmd playwright test
+                    if errorlevel 1 exit /b 1
+                '''
+            }
+        }
     }
 
     post {
         success {
-            echo 'AI Chase C++ validation pipeline PASSED.'
+            echo 'AI Chase validation pipeline PASSED.'
         }
 
         failure {
-            echo 'AI Chase C++ validation pipeline FAILED.'
+            echo 'AI Chase validation pipeline FAILED.'
         }
 
         always {
