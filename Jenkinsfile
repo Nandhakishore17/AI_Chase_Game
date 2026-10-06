@@ -114,13 +114,13 @@ pipeline {
                     node --version
                     if errorlevel 1 exit /b 1
 
-                    npm.cmd --version
+                    call npm.cmd --version
                     if errorlevel 1 exit /b 1
 
-                    npm.cmd ci
+                    call npm.cmd ci
                     if errorlevel 1 exit /b 1
 
-                    npx.cmd playwright --version
+                    call npx.cmd playwright --version
                     if errorlevel 1 exit /b 1
                 '''
             }
@@ -140,7 +140,7 @@ pipeline {
                     python --version
                     if errorlevel 1 exit /b 1
 
-                    npx.cmd playwright test
+                    call npx.cmd playwright test
                     if errorlevel 1 exit /b 1
                 '''
             }
